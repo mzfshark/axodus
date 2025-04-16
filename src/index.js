@@ -1,15 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import { Web3ReactProvider } from '@web3-react/core';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
-import { sendToVercelAnalytics } from './vitals';
+import { ChainId, Web3Provider } from '@ethersproject/providers';
+
+function getLibrary(provider) {
+  return new Web3Provider(provider);
+}
 
 ReactDOM.render(
-  <React.StrictMode>
+  <Web3ReactProvider getLibrary={getLibrary}>
     <App />
-  </React.StrictMode>,
+  </Web3ReactProvider>,
   document.getElementById('root')
 );
-
-reportWebVitals(sendToVercelAnalytics);
