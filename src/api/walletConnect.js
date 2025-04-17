@@ -1,5 +1,5 @@
 import { InjectedConnector } from '@web3-react/injected-connector';
-import { Client, WalletConnectProvider } from '@walletconnect/client'; // Import the new WalletConnect client
+import { UniversalProvider } from '@walletconnect/universal-provider';  // Correct import for WalletConnect v2
 
 // Get environment variables
 const ANKR_ACCOUNT_TOKEN = process.env.REACT_APP_ANKR_ACCOUNT_TOKEN;
@@ -33,8 +33,8 @@ export const injected = new InjectedConnector({
   supportedChainIds: SUPPORTED_CHAIN_IDS.map(id => parseInt(id, 10)),
 });
 
-// WalletConnect Connector (updated for WalletConnect 2.0)
-export const walletconnect = new WalletConnectProvider({
+// WalletConnect Provider (using Universal Provider for WalletConnect v2)
+export const walletconnect = new UniversalProvider({
   rpc: {
     1: getRpcUrl(1),    // Ethereum Mainnet
     3: getRpcUrl(3),    // Ropsten Testnet
@@ -47,23 +47,13 @@ export const walletconnect = new WalletConnectProvider({
   },
   clientMeta: {
     description: 'Axodus Dashboard - WalletConnect',
-    url: 'https://yourwebsite.com',
-    icons: ['https://yourwebsite.com/favicon.ico'],
+    url: 'https://localhost:3000',
+    icons: ['https://localhost:3000/favicon.ico'],
     name: 'Axodus',
   },
   supportedChainIds: SUPPORTED_CHAIN_IDS.map(id => parseInt(id, 10)),
-  qrCodeModalOptions: {
-    mobileLinks: ['metamask', 'trust'],
+  qrcodeModalOptions: {
+    mobileLinks: ['metamask', 'trust'], // Configure available wallets
   },
+  // Additional settings for WalletConnect v2 can be configured here
 });
-
-export const getWalletConnectClient = () => {
-  const client = new Client({
-    bridge: 'https://bridge.walletconnect.org', // Bridge server for WalletConnect 2.0
-    qrcodeModalOptions: {
-      mobileLinks: ['metamask', 'trust'], // Configure available wallets
-    },
-  });
-
-  return client;
-};

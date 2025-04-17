@@ -8,7 +8,7 @@ export const fetchTokenBalance = async (provider, tokenAddress, userAddress) => 
     ], provider);
 
     const balance = await tokenContract.balanceOf(userAddress);
-    return ethers.utils.formatUnits(balance, 18); // assuming the token has 18 decimals
+    return ethers.formatUnits(balance, 18); // assuming the token has 18 decimals
   } catch (error) {
     console.error("Error fetching token balance:", error);
     return 0;

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
-import { injected, walletconnect, getWalletConnectClient } from '../api/walletConnect';
+import { injected, walletconnect } from '../api/walletConnect';
 
 const WalletConnection = () => {
   const { activate, deactivate, account } = useWeb3React();
@@ -12,9 +12,7 @@ const WalletConnection = () => {
 
   const connectWalletConnect = async () => {
     setIsConnecting(true);
-    const client = getWalletConnectClient();
-    await client.connect();
-    activate(walletconnect);
+    await activate(walletconnect);
     setIsConnecting(false);
   };
 
