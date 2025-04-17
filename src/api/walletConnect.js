@@ -1,5 +1,5 @@
-import { WalletConnectConnector } from '@web3-react/walletconnect-connector';
 import { InjectedConnector } from '@web3-react/injected-connector';
+import { Client, WalletConnectProvider } from '@walletconnect/client'; // Import the new WalletConnect client
 
 // Get environment variables
 const ANKR_ACCOUNT_TOKEN = process.env.REACT_APP_ANKR_ACCOUNT_TOKEN;
@@ -33,8 +33,8 @@ export const injected = new InjectedConnector({
   supportedChainIds: SUPPORTED_CHAIN_IDS.map(id => parseInt(id, 10)),
 });
 
-// WalletConnect Connector with dynamic RPC URL based on chain ID
-export const walletconnect = new WalletConnectConnector({
+// WalletConnect Connector (updated for WalletConnect 2.0)
+export const walletconnect = new WalletConnectProvider({
   rpc: {
     1: getRpcUrl(1),    // Ethereum Mainnet
     3: getRpcUrl(3),    // Ropsten Testnet
@@ -45,6 +45,25 @@ export const walletconnect = new WalletConnectConnector({
     80001: getRpcUrl(80001), // Mumbai Testnet (Polygon)
     // Add more chains as necessary
   },
-  qrcode: true,
+  clientMeta: {
+    description: 'Axodus Dashboard - WalletConnect',
+    url: 'https://yourwebsite.com',
+    icons: ['https://yourwebsite.com/favicon.ico'],
+    name: 'Axodus',
+  },
   supportedChainIds: SUPPORTED_CHAIN_IDS.map(id => parseInt(id, 10)),
+  qrCodeModalOptions: {
+    mobileLinks: ['metamask', 'trust'],
+  },
 });
+
+export const getWalletConnectClient = () => {
+  const client = new Client({
+    bridge: 'https://bridge.walletconnect.org', // Bridge server for WalletConnect 2.0
+    qrcodeModalOptions: {
+      mobileLinks: ['metamask', 'trust'], // Configure available wallets
+    },
+  });
+
+  return client;
+};
