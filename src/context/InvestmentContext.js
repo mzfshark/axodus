@@ -1,41 +1,54 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
-import { useWeb3React } from '@web3-react/core';
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { useAppKit } from './AppKitProvider';
 import { fetchTokenBalance } from '../services/blockchainService';
 
 const InvestmentContext = createContext();
 
-export const useInvestment = () => {
-  return useContext(InvestmentContext);
-};
+export const useInvestment = () => useContext(InvestmentContext);
 
 export const InvestmentProvider = ({ children }) => {
-  const { account, library } = useWeb3React();
+  const { appKit, isReady } = useAppKit();
   const [tokenBalances, setTokenBalances] = useState({});
-  
+  const [chainId, setChainId] = useState(null);
+  const [tokenList, setTokenList] = useState([]);
+
   useEffect(() => {
     const fetchBalances = async () => {
-      if (account && library) {
-        // Define the tokens you want to track
-        const tokenAddresses = [
-          '0x...TokenAddress1', // Replace with actual token addresses
-          '0x...TokenAddress2',
-        ];
+      if (!isReady) return;
+
+      try {
+        const signer = await appKit.getSigner();
+        const provider = signer.provider;
+        const account = await signer.getAddress();
+        const network = await provider.getNetwork();
+        const currentChainId = Number(network.chainId);
+
+        setChainId(currentChainId);
+
+        // Carrega tokenlist da chain conectada
+        const tokenListModule = await import(`../assets/tokenlist/${currentChainId}.json`);
+        const tokens = tokenListModule.default;
+
+        setTokenList(tokens);
 
         const balances = {};
-        for (let tokenAddress of tokenAddresses) {
-          const balance = await fetchTokenBalance(library, tokenAddress, account);
-          balances[tokenAddress] = balance;
+
+        for (const token of tokens) {
+          const balance = await fetchTokenBalance(provider, token.address, account);
+          balances[token.symbol] = balance;
         }
 
         setTokenBalances(balances);
+      } catch (error) {
+        console.error('Erro ao buscar balances:', error);
       }
     };
 
     fetchBalances();
-  }, [account, library]);
+  }, [appKit, isReady]);
 
   return (
-    <InvestmentContext.Provider value={{ tokenBalances }}>
+    <InvestmentContext.Provider value={{ tokenBalances, tokenList, chainId }}>
       {children}
     </InvestmentContext.Provider>
   );

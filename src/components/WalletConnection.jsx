@@ -1,39 +1,32 @@
-import React, { useState } from 'react';
-import { useWeb3React } from '@web3-react/core';
-import { injected, walletconnect } from '../api/walletConnect';
+import React from 'react';
+import { useAppKit } from '../context/AppKitProvider';
 
 const WalletConnection = () => {
-  const { activate, deactivate, account } = useWeb3React();
-  const [isConnecting, setIsConnecting] = useState(false);
+  const { appKit, isReady } = useAppKit();
 
-  const connectMetaMask = () => {
-    activate(injected);
-  };
-
-  const connectWalletConnect = async () => {
-    setIsConnecting(true);
-    await activate(walletconnect);
-    setIsConnecting(false);
-  };
-
-  const disconnect = () => {
-    deactivate();
+  const handleConnect = async () => {
+    if (!isReady) {
+      console.error('AppKit not ready yet');
+      return;
+    }
+    try {
+      await appKit.connect(); // Check official docs for exact API
+      const signer = await appKit.getSigner();
+      const address = await signer.getAddress();
+      console.log('Connected with:', address);
+    } catch (err) {
+      console.error('Connection error:', err);
+    }
   };
 
   return (
     <div>
-      {account ? (
-        <div>
-          <p>Connected with account: {account}</p>
-          <button onClick={disconnect}>Disconnect</button>
-        </div>
+      {isReady ? (
+        <button onClick={handleConnect}>
+          Connect Wallet
+        </button>
       ) : (
-        <div>
-          <button onClick={connectMetaMask}>Connect with MetaMask</button>
-          <button onClick={connectWalletConnect} disabled={isConnecting}>
-            {isConnecting ? 'Connecting...' : 'Connect with WalletConnect'}
-          </button>
-        </div>
+        <div>Loading Wallet...</div>
       )}
     </div>
   );
