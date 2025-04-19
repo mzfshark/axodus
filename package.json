@@ -7,7 +7,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build:vite": "tsc -b && vite build",
+    "build:vite": "vite build",
     "preview": "vite preview",
     "start:react": "react-scripts start",
     "build:react": "react-scripts build",
@@ -42,7 +42,7 @@
     "@wagmi/core": "^2.13.5",
     "axios": "^1.8.4",
     "ethers": "^6.13.5",
-    "next": "14.2.4",
+    "next": "14.2.26",
     "next-auth": "^4.24.7",
     "qr": "0.4.0",
     "react": "^19.1.0",

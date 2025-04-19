@@ -8,7 +8,7 @@ import { SolanaAdapter } from '@reown/appkit-adapter-solana/react';
 import { mainnet, arbitrum, solana, solanaDevnet, solanaTestnet, AppKitNetwork } from '@reown/appkit/networks';
 
 // Get projectId from https://cloud.reown.com
-const projectId = import.meta.env.VITE_PROJECT_ID || '5e64f2b59a17e7bce18c075ae0fb40a8';
+export const projectId = import.meta.env.VITE_PROJECT_ID || '5e64f2b59a17e7bce18c075ae0fb40a8';
 
 if (!projectId) {
   throw new Error('Project ID is not defined');
@@ -32,6 +32,7 @@ export const wagmiAdapter = new WagmiAdapter({
 
 export const solanaWeb3JsAdapter = new SolanaAdapter();
 export const config = wagmiAdapter.wagmiConfig;
+
 
 // Renderização
 const root = ReactDOM.createRoot(document.getElementById('root'));
