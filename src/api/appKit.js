@@ -12,8 +12,8 @@ const networks = [arbitrum, mainnet];
 const metadata = {
   name: 'Axodus Finance',
   description: 'Investor dashboard',
-  url: 'https://yourdomain.com', // must match your deployed domain!
-  icons: ['https://yourdomain.com/favicon.ico']
+  url: 'https://localhost:3000', // must match your deployed domain!
+  icons: ['https://localhost:3000/favicon.ico']
 };
 
 // Create AppKit instance
