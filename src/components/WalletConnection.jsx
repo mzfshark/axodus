@@ -1,33 +1,27 @@
+// src/components/WalletConnection.jsx
 import React from 'react';
 import { useAppKit } from '../context/AppKitProvider';
 
 const WalletConnection = () => {
-  const { appKit, isReady } = useAppKit();
+  const { appKit, isReady, error } = useAppKit();
 
-  const handleConnect = async () => {
-    if (!isReady) {
-      console.error('AppKit not ready yet');
-      return;
-    }
+  const connectWallet = async () => {
     try {
-      await appKit.connect(); // Check official docs for exact API
+      await appKit.connect();
       const signer = await appKit.getSigner();
       const address = await signer.getAddress();
       console.log('Connected with:', address);
     } catch (err) {
-      console.error('Connection error:', err);
+      console.error('Wallet connect error:', err);
     }
   };
 
+  if (error) return <div>Failed to load wallet: {error.message}</div>;
+  if (!isReady) return <div>Loading wallet...</div>;
+
   return (
     <div>
-      {isReady ? (
-        <button onClick={handleConnect}>
-          Connect Wallet
-        </button>
-      ) : (
-        <div>Loading Wallet...</div>
-      )}
+      <button onClick={connectWallet}>Connect Wallet</button>
     </div>
   );
 };
