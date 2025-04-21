@@ -1,7 +1,7 @@
 // src/components/WalletConnectButton.jsx
 import React from 'react';
 import { ConnectButton } from '@reown/appkit-ui';
-import '@reown/appkit-ui/style.css'; // Importa o estilo padrão do botão
+import '../styles/Global.module.css'; // Importa o estilo padrão do botão
 
 const WalletConnectButton = () => {
   return (

@@ -1,3 +1,5 @@
+// src/components/TokenBalance.jsx
+
 import React from 'react';
 import { useInvestment } from '../context/InvestmentContext';
 

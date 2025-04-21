@@ -1,3 +1,4 @@
+// src/components/InfoList.jsx
 import { useEffect } from 'react'
 import {
     useAppKitState,

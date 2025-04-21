@@ -1,63 +1,48 @@
-// pages/Dashboard.jsx
-import React, { useEffect, useState } from 'react';
-import { useAccount, useNetwork } from '@reown/appkit/react';
-import { formatEther } from 'ethers';
-import WalletConnectButton from '../components/WalletConnectButton';
-import { useAppKit } from '../context/AppKitProvider';
+// src/pages/Dashboard.jsx
+import React from 'react';
+import InvestmentCard from '../components/InvestmentCard';
+import PerformanceGraph from '../components/PerformanceGraph';
+import TokenBalance from '../components/TokenBalance';
+import InfoList from '../components/InfoList';
+
+import '../styles/Global.module.css';
+
+const mockInvestments = [
+  { name: 'Ethereum', value: 24500, change: 3.5, icon: '/assets/icons/eth.svg' },
+  { name: 'Polygon', value: 8200, change: -1.2, icon: '/assets/icons/matic.svg' },
+  { name: 'Bitcoin', value: 36400, change: 2.1, icon: '/assets/icons/btc.svg' }
+];
+
+const mockPerformance = [
+  { name: 'Jan', value: 1000 },
+  { name: 'Feb', value: 1300 },
+  { name: 'Mar', value: 1250 },
+  { name: 'Apr', value: 1600 },
+  { name: 'May', value: 1800 },
+  { name: 'Jun', value: 1400 },
+  { name: 'Jul', value: 2000 }
+];
 
 const Dashboard = () => {
-  const { address, isConnected } = useAccount();
-  const { chain } = useNetwork();
-  const { appKit } = useAppKit();
-  const [balance, setBalance] = useState(null);
-  const [loadingBalance, setLoadingBalance] = useState(false);
-
-  // Buscar saldo da carteira
-  useEffect(() => {
-    const fetchBalance = async () => {
-      if (!isConnected || !appKit) return;
-      try {
-        setLoadingBalance(true);
-        const signer = await appKit.getSigner();
-        const rawBalance = await signer.provider.getBalance(address);
-        const ethBalance = formatEther(rawBalance); // Converter para ETH/MATIC etc.
-        setBalance(ethBalance);
-      } catch (error) {
-        console.error('Error fetching balance:', error);
-        setBalance(null);
-      } finally {
-        setLoadingBalance(false);
-      }
-    };
-
-    fetchBalance();
-  }, [isConnected, address, appKit]);
-
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Welcome to the Axodus Dashboard</h1>
-
-      <div className="mb-4">
-        <WalletConnectButton />
+    <div className="dashboard-container">
+      <div className="dashboard-summary">
+        {mockInvestments.map((inv) => (
+          <InvestmentCard key={inv.name} {...inv} />
+        ))}
       </div>
 
-      {isConnected ? (
-        <div className="bg-gray-100 p-4 rounded shadow-md space-y-2">
-          <p><strong>Connected account:</strong> {address}</p>
-          <p><strong>Chain ID:</strong> {chain?.id}</p>
-          <p><strong>Network name:</strong> {chain?.name}</p>
-          <p>
-            <strong>Balance:</strong>{' '}
-            {loadingBalance
-              ? 'Loading...'
-              : balance !== null
-              ? `${balance} ${chain?.nativeCurrency?.symbol || 'ETH'}`
-              : 'N/A'}
-          </p>
-        </div>
-      ) : (
-        <p className="text-gray-600">Please connect your wallet to access your dashboard.</p>
-      )}
+      <div className="dashboard-section">
+        <PerformanceGraph data={mockPerformance} title="Portfolio Performance" />
+      </div>
+
+      <div className="dashboard-section">
+        <TokenBalance />
+      </div>
+
+      <div className="dashboard-section">
+        <InfoList />
+      </div>
     </div>
   );
 };
