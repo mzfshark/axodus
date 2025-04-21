@@ -1,5 +1,5 @@
 import { useDisconnect, useAppKit, useAppKitNetwork  } from '@reown/appkit/react'
-import { networks } from '..'
+import { networks } from '../appkit.config'
 
 export const ActionButtonList = () => {
     const { disconnect } = useDisconnect();

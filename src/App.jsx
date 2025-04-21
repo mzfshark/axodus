@@ -6,7 +6,13 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { ActionButtonList } from './components/ActionButtonList';
 import { InfoList } from './components/InfoList';
-import { projectId, metadata, networks, wagmiAdapter, solanaWeb3JsAdapter } from './index';
+import {
+  projectId,
+  metadata,
+  networks,
+  wagmiAdapter,
+  solanaWeb3JsAdapter
+} from "./appkit.config";
 
 import './App.css';
 

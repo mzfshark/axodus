@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Dashboard para investidores",
   "private": true,
-  "main": "src/index.jsx",
+  "main": "src/main.jsx",
   "type": "module",
   "scripts": {
     "dev": "vite",
