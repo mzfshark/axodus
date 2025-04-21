@@ -16,7 +16,7 @@ module.exports = {
         test: /\.js$/,
         enforce: 'pre',
         use: ['source-map-loader'],
-        exclude: /@reown\/appkit/, // Ignora os arquivos de source map do pacote @reown/appkit
+//        exclude: /@reown\/appkit/, // Ignora os arquivos de source map do pacote @reown/appkit
       },
       {
         test: /\.jsx?$/, // Trata arquivos JS e JSX
