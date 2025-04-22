@@ -1,16 +1,32 @@
 // src/main.jsx
 import React from 'react';
-import { createRoot } from 'react-dom/client';
-import App from './App';
+import ReactDOM from 'react-dom/client';
 
-const rootElement = document.getElementById('root');
+import AppRoutes from './routes'; // deve conter <Routes> com as pages
+import { InvestmentProvider } from './context/InvestmentContext';
 
-if (!rootElement) {
-  throw new Error('Root element not found');
-}
+import { AppKitProvider } from './providers/AppKitProvider';
+import {
+  projectId,
+  metadata,
+  networks
+} from './appkit.config';
 
-createRoot(rootElement).render(
+import { BrowserRouter } from 'react-router-dom';
+
+ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <App />
+    <AppKitProvider
+      projectId={projectId}
+      metadata={metadata}
+      networks={networks}
+
+    >
+      <InvestmentProvider>
+        <BrowserRouter>
+          <AppRoutes />
+        </BrowserRouter>
+      </InvestmentProvider>
+    </AppKitProvider>
   </React.StrictMode>
 );

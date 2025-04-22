@@ -1,89 +1,49 @@
-/*  src/appkit.config.js
- *  Central place for every shared constant / helper that the Axodus
- *  front‑end (Vite + React + Reown AppKit + ethers‑v6) needs.
- *  ────────────────────────────────────────────────────────────────── */
+// src/appkit.config.js
+import { createAppKit } from '@reown/appkit/react';
+import { wagmiAdapter } from '@adapters/wagmiAdapter';
+import { solanaAdapter } from '@adapters/solanaAdapter';
+import { bitcoinAdapter } from '@adapters/bitcoinAdapter';
+import { mainnet, bsc, harmonyOne, arbitrum, polygon, solana, bitcoin, avalanche, base, celo, optimism, opBNB, cronos } from '@reown/appkit/networks';
 
-import {
-  AppKit,                       // classe principal
-  createWagmiAdapter,
-  createSolanaWeb3JsAdapter,
-  chains                         // objeto com todas as chains de exemplo
-} from "@reown/appkit";
+export const projectId = import.meta.env.VITE_PROJECT_ID || '5e64f2b59a17e7bce18c075ae0fb40a8';
 
-/* ------------------------------------------------------------------ */
-/* Project‑level identifiers                                           */
-/* ------------------------------------------------------------------ */
-
-/** WalletConnect / project ID issued by Reown’s dashboard */
-export const projectId = process.env.REACT_APP_PROJECT_ID;
-
-/** Optional dApp metadata (used by WalletConnect or Reown’s modal) */
 export const metadata = {
-  name        : "Axodus Dashboard",
-  description : "Multi‑chain portfolio and performance dashboard",
-  url         : "https://app.axodus.finance",          // must be HTTPS
-  icons       : ["https://app.axodus.finance/icon.png"]
+  name: 'Axodus Dashboard',
+  description: 'Multi-chain portfolio and performance dashboard',
+  url: 'https://app.axodus.finance',
+  icons: ['https://app.axodus.finance/icon.png']
 };
 
-/* ------------------------------------------------------------------ */
-/* Chains (wagmi style)                                               */
-/* ------------------------------------------------------------------ */
+export const tron = {
+  id: 'tron',
+  name: 'Tron',
+  symbol: 'TRX',
+  rpcUrl: 'https://api.trongrid.io',
+  note: 'Adapter not implemented'
+};
 
-/**
- *  List ONLY the EVM chains you want to enable in the modal / hooks.
- *  You may import helpers from “@reown/appkit/chains” (which re‑export
- *  Viem/Wagmi chain objects) or build custom ones.
- */
-const {   mainnet, bsc, arbitrum, harmonyOne, avalanche, polygon, 
-  celo, optimism, opBNB, base, cronos, solana, bitcoin, tron } = chains;
-export const networks = [
-  mainnet, 
-  bsc, 
-  arbitrum, 
-  harmonyOne, 
-  avalanche, 
-  polygon, 
-  celo, 
-  optimism, 
-  opBNB, 
-  base, 
-  cronos, 
-  solana, 
-  bitcoin, 
-  tron
-];
+export const networks = {mainnet, bsc, arbitrum, harmonyOne, avalanche,
+  polygon, celo, optimism, opBNB, base, cronos, solana, bitcoin};
 
-/* ------------------------------------------------------------------ */
-/* Adapters                                                            */
-/* ------------------------------------------------------------------ */
 
-/**
- *  wagmiAdapter — used for all EVM chains via Viem/Wagmi + ethers v6
- *  solanaWeb3JsAdapter — example Solana adapter (optional)
- *
- *  If you do NOT connect to Solana, you can remove that part.
- */
-export const wagmiAdapter = createWagmiAdapter({
+// Registra os adapters com AppKit
+createAppKit({
+  adapters: [wagmiAdapter, solanaAdapter, bitcoinAdapter],
+  networks: [mainnet, bsc, arbitrum, harmonyOne, avalanche,
+    polygon, celo, optimism, opBNB, base, cronos, solana, bitcoin],
   projectId,
-  metadata,
-  chains : networks
-});
+  metadata: metadata,
+  features: {
+    analytics: true,
+    enableWalletConnect: true,
+    enableNetworkSwitch: true,
 
-export const solanaWeb3JsAdapter = createSolanaWeb3JsAdapter({
-  projectId,
-  metadata,
-  // Optional: pass RPC endpoints or connection opts here
-  endpoint : "https://api.mainnet-beta.solana.com"
+  }
 });
-
-/* ------------------------------------------------------------------ */
-/* Convenience re‑exports                                              */
-/* ------------------------------------------------------------------ */
 
 export default {
   projectId,
   metadata,
   networks,
-  wagmiAdapter,
-  solanaWeb3JsAdapter
+  tron
 };

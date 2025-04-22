@@ -17,7 +17,12 @@ export default defineConfig({
       '@styles': path.resolve(__dirname, './src/styles'),
       '@utils': path.resolve(__dirname, './src/utils'),
       '@services': path.resolve(__dirname, './src/services'),
-      '@config': path.resolve(__dirname, '/src/appkit.config.js' )
+      '@config': path.resolve(__dirname, '/src/appkit.config.js' ),
+      '@reown/appkit-ui/style.css': path.resolve(__dirname, 'node_modules/@reown/appkit-ui/dist/style.css'),
+      'react-router-dom': path.resolve(__dirname, 'node_modules/react-router-dom'),
+      '@adapters': path.resolve(__dirname, './src/adapters'),
+      '@solana/wallet-adapter-wallets': path.resolve(__dirname, 'node_modules/@solana/wallet-adapter-wallets'),
+      '@solana/wallet-adapter-base': path.resolve(__dirname, 'node_modules/@solana/wallet-adapter-base'),
     }
   },
   server: {
@@ -25,10 +30,27 @@ export default defineConfig({
     strictPort: true,
     open: true
   },
+  optimizeDeps: {
+    include: [
+      '@reown/appkit',
+      '@reown/appkit/react',
+      '@reown/appkit/networks',
+      '@reown/appkit-adapter-wagmi',
+      '@reown/appkit-adapter-solana',
+      '@reown/appkit-adapter-bitcoin',
+      '@solana/wallet-adapter-wallets',
+      '@solana/wallet-adapter-base'
+    ]
+  },
   build: {
     sourcemap: true,
     outDir: 'dist',
-    emptyOutDir: true
+    emptyOutDir: true,
+    rollupOptions: {
+      external: [
+
+      ]
+    }
   },
   css: {
     preprocessorOptions: {

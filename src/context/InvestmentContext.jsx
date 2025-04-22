@@ -1,14 +1,15 @@
+// src/context/InvestmentContext.jsx
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { ethers } from 'ethers'; // Usando ethers.js v6
+import { ethers } from 'ethers';
+import { useAppKit } from '@reown/appkit/react';               // ← CORRIGIDO
 import { fetchTokenBalance } from '../services/blockchainService';
-import { useAppKit } from './AppKitProvider'; // Usando AppKit para integração
 
 const InvestmentContext = createContext();
 
 export const useInvestment = () => useContext(InvestmentContext);
 
 export const InvestmentProvider = ({ children }) => {
-  const { appKit, isReady } = useAppKit(); // Obtemos o appKit, como antes
+  const { appKit, isReady } = useAppKit();
   const [tokenBalances, setTokenBalances] = useState({});
   const [chainId, setChainId] = useState(null);
   const [tokenList, setTokenList] = useState([]);
@@ -18,17 +19,15 @@ export const InvestmentProvider = ({ children }) => {
       if (!isReady) return;
 
       try {
-        // Usando reown appkit ou ethers.js diretamente para obter o signer
         let signer;
-        if (appKit) {
-          // Se o appKit fornece a funcionalidade para obter o signer
+
+        if (appKit?.getSigner) {
           signer = await appKit.getSigner();
         } else if (window.ethereum) {
-          // Caso o appKit não forneça a função getSigner, usamos ethers.js diretamente
           const provider = new ethers.BrowserProvider(window.ethereum);
           signer = await provider.getSigner();
         } else {
-          console.error('Ethereum não está disponível no navegador.');
+          console.error('Ethereum provider not found');
           return;
         }
 
@@ -38,14 +37,12 @@ export const InvestmentProvider = ({ children }) => {
 
         setChainId(currentChainId);
 
-        // Carrega tokenlist da chain conectada
+        // Load token list for current chain
         const tokenListModule = await import(`../assets/tokenlist/${currentChainId}.json`);
         const tokens = tokenListModule.default;
-
         setTokenList(tokens);
 
         const balances = {};
-
         for (const token of tokens) {
           const balance = await fetchTokenBalance(signer.provider, token.address, account);
           balances[token.symbol] = balance;
@@ -58,7 +55,7 @@ export const InvestmentProvider = ({ children }) => {
     };
 
     fetchBalances();
-  }, [appKit, isReady]); // Dependências para executar a função quando `appKit` ou `isReady` mudarem
+  }, [appKit, isReady]);
 
   return (
     <InvestmentContext.Provider value={{ tokenBalances, tokenList, chainId }}>

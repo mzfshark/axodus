@@ -1,14 +1,16 @@
 // src/components/WalletConnectButton.jsx
 import React from 'react';
-import { ConnectButton } from '@reown/appkit-ui';
-import '../styles/Global.module.css'; // Importa o estilo padrão do botão
 
-const WalletConnectButton = () => {
-  return (
-    <div className="flex items-center justify-center p-4">
-      <ConnectButton />
-    </div>
-  );
-};
+// carrega o web‑component e registra-o no customElements
+import '@reown/appkit-wallet-button/react';
+
+
+const WalletConnectButton = () => (
+  <div style={{display:'flex',justifyContent:'center',padding:'1rem'}}>
+    {/* web‑component */}
+    <appkit-connect-button />
+  </div>
+);
 
 export default WalletConnectButton;
+

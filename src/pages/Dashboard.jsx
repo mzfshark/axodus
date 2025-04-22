@@ -3,9 +3,11 @@ import React from 'react';
 import InvestmentCard from '../components/InvestmentCard';
 import PerformanceGraph from '../components/PerformanceGraph';
 import TokenBalance from '../components/TokenBalance';
-import InfoList from '../components/InfoList';
+import { InfoList } from '../components/InfoList';
+import Header from '../components/Header';
+import Sidebar from '../components/Sidebar';
 
-import '../styles/Global.module.css';
+import '../styles/Global.module.css';  // layout base
 
 const mockInvestments = [
   { name: 'Ethereum', value: 24500, change: 3.5, icon: '/assets/icons/eth.svg' },
@@ -25,24 +27,30 @@ const mockPerformance = [
 
 const Dashboard = () => {
   return (
-    <div className="dashboard-container">
-      <div className="dashboard-summary">
-        {mockInvestments.map((inv) => (
-          <InvestmentCard key={inv.name} {...inv} />
-        ))}
-      </div>
+    <div className="dashboard-wrapper">
+      <Sidebar />
 
-      <div className="dashboard-section">
-        <PerformanceGraph data={mockPerformance} title="Portfolio Performance" />
-      </div>
+      <main className="dashboard-main">
+        <Header />
 
-      <div className="dashboard-section">
-        <TokenBalance />
-      </div>
+        <div className="dashboard-summary">
+          {mockInvestments.map((inv) => (
+            <InvestmentCard key={inv.name} {...inv} />
+          ))}
+        </div>
 
-      <div className="dashboard-section">
-        <InfoList />
-      </div>
+        <div className="dashboard-section">
+          <PerformanceGraph data={mockPerformance} title="Portfolio Performance" />
+        </div>
+
+        <div className="dashboard-section">
+          <TokenBalance />
+        </div>
+
+        <div className="dashboard-section">
+          <InfoList />
+        </div>
+      </main>
     </div>
   );
 };

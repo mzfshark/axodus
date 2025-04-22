@@ -1,33 +1,31 @@
-// pages/transactionHistory.js
+// src/pages/TransactionHistoryPage.jsx
 import React, { useEffect, useState } from 'react';
-import { useAppKit } from '../context/AppKitProvider';
+import { useAppKit } from '@reown/appkit/react';
 
-const TransactionHistory = () => {
-  const { appKit, isReady } = useAppKit(); // Usando appKit para interagir com a carteira
-  const [transactions, setTransactions] = useState([]); // Estado para armazenar as transações
+const TransactionHistoryPage = () => {
+  const { appKit, isReady } = useAppKit();
+  const [transactions, setTransactions] = useState([]);
 
-  // Função para buscar transações
   const fetchTransactions = async () => {
     try {
       if (!isReady) return;
 
-      // Aqui você deve integrar com um serviço de transações, por exemplo, usando ethers.js
       const signer = await appKit.getSigner();
       const account = await signer.getAddress();
-      // Aqui você pode usar um serviço para buscar transações ou usar ethers.js para pegar o histórico de transações.
 
-      const txHistory = []; // Exemplo fictício
+      // TODO: trocar por lógica real de histórico de transações
+      const txHistory = [
+        `Mock transaction for ${account}`
+      ];
+
       setTransactions(txHistory);
     } catch (error) {
       console.error('Erro ao buscar transações:', error);
     }
   };
 
-  // Carregar as transações quando o appKit estiver pronto
   useEffect(() => {
-    if (isReady) {
-      fetchTransactions(); // Tenta buscar as transações
-    }
+    fetchTransactions();
   }, [isReady]);
 
   return (
@@ -35,7 +33,7 @@ const TransactionHistory = () => {
       <h1>Transaction History</h1>
       <ul>
         {transactions.length > 0 ? (
-          transactions.map((tx, index) => <li key={index}>{tx}</li>) // Exibindo as transações
+          transactions.map((tx, index) => <li key={index}>{tx}</li>)
         ) : (
           <p>No transactions found.</p>
         )}
@@ -44,4 +42,4 @@ const TransactionHistory = () => {
   );
 };
 
-export default TransactionHistory;
+export default TransactionHistoryPage;
