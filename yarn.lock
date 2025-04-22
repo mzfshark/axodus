@@ -16573,9 +16573,9 @@ xmlhttprequest-ssl@~2.1.1:
   integrity sha512-TEU+nJVUUnA4CYJFLvK5X9AOeH4KvDvhIfm0vV1GaQRtchnG0hgK5p8hw/xjv8cunWYCsiPCSDzObPyhEwq3KQ==
 
 xrpl@^4.2.0:
-  version "4.2.4"
-  resolved "https://registry.yarnpkg.com/xrpl/-/xrpl-4.2.4.tgz#7279bc98f932e4ae3ad7c3de1f04784c2f9c033c"
-  integrity sha512-F1RvBhg2cmazA3okxWdLNFjCmhTPJFcIfcny/fVI64dUcbw3ibJ4NvUSZqHpwaYTVuqjxdc4rLrwdKfVXG8PmA==
+  version "4.2.5"
+  resolved "https://registry.yarnpkg.com/xrpl/-/xrpl-4.2.5.tgz#ad9e7c0ab239eae46133b2c06c46aff4756a9aba"
+  integrity sha512-QIpsqvhaRiVvlq7px7lC+lhrxESDMN1vd8mW0SfTgY5WgzP9RLiDoVywOOvSZqDDjPs0EGfhxzYjREW1gGu0Ng==
   dependencies:
     "@scure/bip32" "^1.3.1"
     "@scure/bip39" "^1.2.1"
