@@ -6,7 +6,7 @@ import '@reown/appkit-wallet-button/react';
 
 
 const WalletConnectButton = () => (
-  <div style={{display:'flex',justifyContent:'center',padding:'1rem'}}>
+  <div style={{display:'flex',justifyContent:'center',padding:'0 3rem'}}>
     {/* web‑component */}
     <appkit-connect-button />
   </div>

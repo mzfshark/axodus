@@ -1,56 +1,69 @@
 // src/pages/Dashboard.jsx
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { getUserInvestments, getUserPerformance } from "../api/userData";
 import InvestmentCard from '../components/InvestmentCard';
 import PerformanceGraph from '../components/PerformanceGraph';
 import TokenBalance from '../components/TokenBalance';
 import { InfoList } from '../components/InfoList';
-import Header from '../components/Header';
-import Sidebar from '../components/Sidebar';
-
-import '../styles/Global.module.css';  // layout base
-
-const mockInvestments = [
-  { name: 'Ethereum', value: 24500, change: 3.5, icon: '/assets/icons/eth.svg' },
-  { name: 'Polygon', value: 8200, change: -1.2, icon: '/assets/icons/matic.svg' },
-  { name: 'Bitcoin', value: 36400, change: 2.1, icon: '/assets/icons/btc.svg' }
-];
-
-const mockPerformance = [
-  { name: 'Jan', value: 1000 },
-  { name: 'Feb', value: 1300 },
-  { name: 'Mar', value: 1250 },
-  { name: 'Apr', value: 1600 },
-  { name: 'May', value: 1800 },
-  { name: 'Jun', value: 1400 },
-  { name: 'Jul', value: 2000 }
-];
+import { useWallet } from '../hooks/useWallet';
+import styles from '../styles/Global.module.css';
 
 const Dashboard = () => {
+  const { address, isConnected } = useWallet();
+
+  const [investments, setInvestments] = useState([]);
+  const [performance, setPerformance] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!isConnected) return;
+
+    async function fetchData() {
+      setLoading(true);
+      try {
+        const [inv, perf] = await Promise.all([
+          getUserInvestments(address),
+          getUserPerformance(address)
+        ]);
+        setInvestments(inv);
+        setPerformance(perf);
+      } catch (error) {
+        console.error("Failed to fetch user data", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchData();
+  }, [address, isConnected]);
+
+  if (loading) {
+    return <div className={styles["dashboard-container"]}>Loading dashboard data...</div>;
+  }
+
   return (
-    <div className="dashboard-wrapper">
-      <Sidebar />
+    <div className={styles["dashboard-container"]}>
+      {/* Cards de Investimentos */}
+      <div className={styles["dashboard-summary"]}>
+        {investments.map((inv) => (
+          <InvestmentCard key={inv.productId} {...inv} />
+        ))}
+      </div>
 
-      <main className="dashboard-main">
-        <Header />
+      {/* Gráfico de performance */}
+      <div className={styles["dashboard-section"]}>
+        <PerformanceGraph data={performance} title="Portfolio Performance" />
+      </div>
 
-        <div className="dashboard-summary">
-          {mockInvestments.map((inv) => (
-            <InvestmentCard key={inv.name} {...inv} />
-          ))}
-        </div>
+      {/* Saldo de Tokens */}
+      <div className={styles["dashboard-section"]}>
+        <TokenBalance />
+      </div>
 
-        <div className="dashboard-section">
-          <PerformanceGraph data={mockPerformance} title="Portfolio Performance" />
-        </div>
-
-        <div className="dashboard-section">
-          <TokenBalance />
-        </div>
-
-        <div className="dashboard-section">
-          <InfoList />
-        </div>
-      </main>
+      {/* Lista de informações adicionais */}
+      <div className={styles["dashboard-section"]}>
+        <InfoList />
+      </div>
     </div>
   );
 };

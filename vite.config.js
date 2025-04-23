@@ -17,18 +17,23 @@ export default defineConfig({
       '@styles': path.resolve(__dirname, './src/styles'),
       '@utils': path.resolve(__dirname, './src/utils'),
       '@services': path.resolve(__dirname, './src/services'),
-      '@config': path.resolve(__dirname, '/src/appkit.config.js' ),
-      '@reown/appkit-ui/style.css': path.resolve(__dirname, 'node_modules/@reown/appkit-ui/dist/style.css'),
-      'react-router-dom': path.resolve(__dirname, 'node_modules/react-router-dom'),
+      '@config': path.resolve(__dirname, './src/appkit.config.js' ),
       '@adapters': path.resolve(__dirname, './src/adapters'),
       '@solana/wallet-adapter-wallets': path.resolve(__dirname, 'node_modules/@solana/wallet-adapter-wallets'),
       '@solana/wallet-adapter-base': path.resolve(__dirname, 'node_modules/@solana/wallet-adapter-base'),
     }
   },
   server: {
-    port: 3000,
+    port: 5174,
     strictPort: true,
-    open: true
+    open: true,
+    host: true, // permite acesso externo
+    allowedHosts: ['app.axodus.finance'] // libera o domínio customizado
+  },
+  metadata: {
+    name: "Axodus",
+    description: "Axodus app",
+    url: process.env.VITE_PUBLIC_URL || "http://localhost:5174", // fallback local
   },
   optimizeDeps: {
     include: [

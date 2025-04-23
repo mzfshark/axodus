@@ -1,25 +1,40 @@
 // src/components/Header.jsx
-import React from 'react';
-import { useAppKitAccount } from '@reown/appkit/react';
-import WalletConnectButton from './WalletConnectButton';
-import '../styles/Global.module.css'
+import { Link } from "react-router-dom";
+import WalletConnectButton from "./WalletConnectButton";
+import { useAppKitAccount, useAppKitNetwork, useDisconnect } from "@reown/appkit/react";
+import styles from "../styles/Global.module.css";
+import logo from '../assets/logo.png';
 
-const Header = () => {
-  const { isConnected, address } = useAppKitAccount();
+export default function Header() {
+  const { address: account } = useAppKitAccount();
+  const { disconnect } = useDisconnect();
+  const { network } = useAppKitNetwork();
 
   return (
-    <header className="app-header">
+    <header className={styles["app-header"]}>
       <div className="app-header-left">
-        <h1>Axodus Finance</h1>
+        <Link to="/">
+          <img src={logo} alt="Axodus" style={{ height: "32px" }} />
+        </Link>
       </div>
+
       <div className="app-header-right">
-        <WalletConnectButton />
-        {isConnected && (
-          <span className="wallet-address">{address.slice(0, 6)}...{address.slice(-4)}</span>
+        {!account ? (
+          <WalletConnectButton />
+        ) : (
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", padding: "0 35px" }}>
+            {network?.logoUrl && (
+              <img src={network.logoUrl} alt={network.name} style={{ height: "20px" }} />
+            )}
+            <span className="wallet-address">
+              {account.slice(0, 6)}…{account.slice(-4)}
+            </span>
+            <button onClick={disconnect} className="app-sidebar-toggle">
+              Disconnect
+            </button>
+          </div>
         )}
       </div>
     </header>
   );
-};
-
-export default Header;
+}

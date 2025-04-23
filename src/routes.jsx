@@ -1,20 +1,58 @@
-// src/routes.jsx
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
 
-import Dashboard from './pages/Dashboard';
-import Settings from './pages/Settings';
-import TransactionHistoryPage from './pages/TransactionHistoryPage';
-import Portfolio from './pages/Portfolio';
+import Layout from "./layouts/Layout";
+import Dashboard from "./pages/Dashboard";
+import Portfolio from "./pages/Portfolio";
+import Settings from "./pages/Settings";
+import TransactionHistoryPage from "./pages/TransactionHistoryPage";
+import Overview from "./pages/Overview";
+import ConnectWalletPage from "./pages/ConnectWalletPage";
+import ProtectedRoute from "./components/ProtectedRoute";
 
-const AppRoutes = () => (
-  <Routes>
-    <Route path="/" element={<Dashboard />} />
-    <Route path="/settings" element={<Settings />} />
-    <Route path="/transactions" element={<TransactionHistoryPage />} />
-    <Route path="/portfolio" element={<Portfolio />} />
-  </Routes>
-);
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Layout />,
+    children: [
+      { index: true, element: <Overview /> },
+      { path: "connect", element: <ConnectWalletPage /> },
+      {
+        path: "dashboard",
+        element: (
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "portfolio",
+        element: (
+          <ProtectedRoute>
+            <Portfolio />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "settings",
+        element: (
+          <ProtectedRoute>
+            <Settings />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "transactions",
+        element: (
+          <ProtectedRoute>
+            <TransactionHistoryPage />
+          </ProtectedRoute>
+        ),
+      },
+    ],
+  },
+]);
 
-export default AppRoutes;
-
+export default router;
