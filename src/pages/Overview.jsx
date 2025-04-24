@@ -46,7 +46,7 @@ const Overview = () => {
           <thead>
             <tr>
               <th>Name</th>
-              <th>Type</th>
+              <th>Model</th>
               <th>Chain</th>
               <th style={{ textAlign: "right" }}>ROI</th>
             </tr>

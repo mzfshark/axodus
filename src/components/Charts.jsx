@@ -36,7 +36,7 @@ const chainDistribution = [
 const lineSeries = Array.from({ length: 12 }).map((_, i) => ({
   month: `M${i + 1}`,
   tvl: 100 + i * 15 + Math.random() * 5,
-  profit: 2 + i * 0.8 + Math.random() * 0.3,
+  profit: 2 + i * 14.8 + Math.random() * 5.3,
 }));
 
 // --- COMPONENTS -------------------------------------------------
@@ -49,13 +49,18 @@ const PieCard = ({ title, data }) => (
           data={data}
           dataKey="value"
           nameKey="name"
+
+          innerRadius={60}
           outerRadius={80}
+          fill="#8884d8"
+          paddingAngle={5}
           label={(d) => `${d.name} ${d.value}%`}
         >
           {data.map((entry, index) => (
             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
           ))}
         </Pie>
+        
         <ReTooltip />
       </PieChart>
     </ResponsiveContainer>
