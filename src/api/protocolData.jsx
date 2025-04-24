@@ -50,7 +50,8 @@ export async function getOverviewStats() {
   return {
     totalUsers: 842,
     totalProducts: 5,
-    protocolFee: 35264.046, // em %
+    protocolFee: 35264.046, // em usd
+    protocolApr: 16.38, // %
     totalValueLocked: 176320.23, // em USD
 
     products: [

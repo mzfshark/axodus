@@ -31,8 +31,8 @@ const Overview = () => {
           <span className="stat-value">{stats.totalProducts}</span>
         </div>
         <div className="stat-card">
-          <span className="stat-title">Fees</span>
-          <span className="stat-value">${stats.protocolFee}</span>
+          <span className="stat-title">APR</span>
+          <span className="stat-value">{stats.protocolApr} %</span>
         </div>
         <div className="stat-card">
           <span className="stat-title">TVL </span>
