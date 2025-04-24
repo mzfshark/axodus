@@ -1,16 +1,11 @@
-import React from "react";
+import React, { PureComponent } from 'react';
 import {
-  PieChart,
-  Pie,
-  Cell,
+  PieChart, Pie, Cell,
   Tooltip as ReTooltip,
   ResponsiveContainer,
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
+  LineChart, Line, XAxis, YAxis, CartesianGrid,
   Legend,
+  Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis
 } from "recharts";
 import "../styles/charts.css";
 
@@ -26,18 +21,12 @@ const productAllocation = [
 ];
 
 const chainDistribution = [
-  { name: "Ethereum", value: 40 },
-  { name: "Polygon", value: 18 },
-  { name: "Bitcoin", value: 22 },
-  { name: "Tron", value: 12 },
-  { name: "Others", value: 8 },
+  { name: "Ethereum", value: 40, fullMark: 45 },
+  { name: "Polygon", value: 18, fullMark: 45 },
+  { name: "Bitcoin", value: 22, fullMark: 45 },
+  { name: "Tron", value: 12, fullMark: 45 },
+  { name: "Others", value: 8, fullMark: 45 },
 ];
-
-const lineSeries = Array.from({ length: 12 }).map((_, i) => ({
-  month: `M${i + 1}`,
-  tvl: 100 + i * 15 + Math.random() * 5,
-  profit: 2 + i * 14.8 + Math.random() * 5.3,
-}));
 
 // --- COMPONENTS -------------------------------------------------
 const PieCard = ({ title, data }) => (
@@ -67,34 +56,47 @@ const PieCard = ({ title, data }) => (
   </div>
 );
 
+const RadarCard = ({ title, data }) => (
+  <div className="chart-card half">
+    <h3 className="chart-title">{title}</h3>
+    <ResponsiveContainer width="100%" height={250}>
+      <RadarChart cx="50%" cy="50%" outerRadius="80%" data={data}>
+        <PolarGrid />
+        <PolarAngleAxis dataKey="name" />
+        <PolarRadiusAxis />
+        <Radar name="TVL" dataKey="value" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
+      </RadarChart>
+    </ResponsiveContainer>
+  </div>
+);
+
+const monthNames = [
+  "Mai", "Jun", "Jul", "Aug", "Sep", "Oct",
+  "Nov", "Dec", "Jan", "Feb", "Mar", "Apr"
+];
+
+const lineSeries = Array.from({ length: 12 }).map((_, i) => ({
+  month: monthNames[i],
+  tvl: 100 + i * 15 + Math.random() * 5,
+  profit: 2 + i * 14.8 + Math.random() * 5.3,
+}));
+
+
 const LineCard = () => (
   <div className="chart-card full">
     <h3 className="chart-title">TVL vs Profit % (YTD)</h3>
     <ResponsiveContainer width="100%" height={300}>
       <LineChart data={lineSeries} margin={{ top: 20, right: 20, bottom: 0, left: 0 }}>
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="month" />
+        <XAxis dataKey="month" /> {/* agora funciona corretamente */}
         <YAxis yAxisId="left" tickFormatter={(v) => `$${v}k`} />
         <YAxis yAxisId="right" orientation="right" tickFormatter={(v) => `${v}%`} />
         <Legend />
-        <Line
-          yAxisId="left"
-          type="monotone"
-          dataKey="tvl"
-          stroke="#00bcd4"
-          strokeWidth={2}
-          dot={false}
-        />
-        <Line
-          yAxisId="right"
-          type="monotone"
-          dataKey="profit"
-          stroke="#43a047"
-          strokeWidth={2}
-          dot={false}
-        />
+        <Line yAxisId="left" type="monotone" dataKey="tvl" stroke="#00bcd4" strokeWidth={2} dot={false} />
+        <Line yAxisId="right" type="monotone" dataKey="profit" stroke="#43a047" strokeWidth={2} dot={false} />
         <ReTooltip />
       </LineChart>
+
     </ResponsiveContainer>
   </div>
 );
@@ -108,7 +110,7 @@ export default function OverviewCharts() {
           <PieCard title="Allocation by Product" data={productAllocation} />
         </div>
         <div className="chart-card half">
-          <PieCard title="TVL by Chain" data={chainDistribution} />
+          <RadarCard title="TVL by Chain" data={chainDistribution} />
         </div>
       </div>
 
