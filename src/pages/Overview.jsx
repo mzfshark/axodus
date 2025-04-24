@@ -2,6 +2,9 @@
 import React, { useEffect, useState } from "react";
 import { getOverviewStats } from "../api/protocolData";
 import styles from "../styles/Global.module.css";
+import "../styles/overview.css";
+import "../styles/charts.css";
+import OverviewCharts from "../components/Charts"
 
 const Overview = () => {
   const [stats, setStats] = useState(null);
@@ -17,36 +20,58 @@ const Overview = () => {
   if (!stats) return <p>Loading protocol data...</p>;
 
   return (
-    <div className={styles["dashboard-container"]}>
-      <h1>Axodus Protocol Overview</h1>
+    <div className="overview">
+      <section className="stats-grid">
+        <div className="stat-card">
+          <span className="stat-title">Total Users</span>
+          <span className="stat-value">{stats.totalUsers}</span>
+        </div>
+        <div className="stat-card">
+          <span className="stat-title">Total Products</span>
+          <span className="stat-value">{stats.totalProducts}</span>
+        </div>
+        <div className="stat-card">
+          <span className="stat-title">Fees</span>
+          <span className="stat-value">${stats.protocolFee}</span>
+        </div>
+        <div className="stat-card">
+          <span className="stat-title">TVL </span>
+          <span className="stat-value">$ {stats.totalValueLocked}</span>
+        </div>
+        {/* ...mais cards... */}
+      </section>
+  
+      <section className="products">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Type</th>
+              <th>Chain</th>
+              <th style={{ textAlign: "right" }}>ROI</th>
+            </tr>
+          </thead>
 
-      <div className={styles["dashboard-summary"]}>
-        <div>
-          <strong>TVL:</strong> ${stats.totalValueLocked.toLocaleString()}
-        </div>
-        <div>
-          <strong>Users:</strong> {stats.totalUsers}
-        </div>
-        <div>
-          <strong>Products:</strong> {stats.totalProducts}
-        </div>
-        <div>
-          <strong>Protocol Fee:</strong> {stats.protocolFee}%
-        </div>
-      </div>
+          <tbody>
+            {stats.products.map(({ address, name, type, chain, roi }) => (
+              <tr key={address}>
+                <td>{name}</td>
+                <td>{type}</td>
+                <td>{chain}</td>
+                <td style={{ textAlign: "right" }}>{roi.toFixed(1)}%</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
+  
+      <section className="chart-block">
+        <OverviewCharts />
+        
+      </section>
 
-      <div className={styles["dashboard-section"]}>
-        <h2>Registered Investment Products</h2>
-        <ul>
-          {stats.products.map((p) => (
-            <li key={p.address}>
-              {p.name} — {p.type} ({p.chain}) | ROI: {p.roi}%
-            </li>
-          ))}
-        </ul>
-      </div>
+
     </div>
   );
 };
-
 export default Overview;
