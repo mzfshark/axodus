@@ -33,8 +33,7 @@ export default function Sidebar({ collapsed, onToggle }) {
       {/* botão de colapsar */}
       <button
         onClick={onToggle}
-        className="app-sidebar-toggle"
-        style={{ border: "none", alignSelf: "flex-end" }}
+        className={styles['app-sidebar-toggle']}
         aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
       >
         {collapsed ? "»" : "«"}
@@ -106,7 +105,7 @@ export default function Sidebar({ collapsed, onToggle }) {
           <li>
             <button
               onClick={toggleTheme}
-              className="app-sidebar-toggle"
+              className={styles["theme-toggle"]}
               title="Toggle theme"
               
             >

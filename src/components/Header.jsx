@@ -12,13 +12,13 @@ export default function Header() {
 
   return (
     <header className={styles["app-header"]}>
-      <div className="app-header-left">
+      <div className={styles["app-header-left"]}>
         <Link to="/">
           <img src={logo} alt="Axodus" style={{ height: "32px" }} />
         </Link>
       </div>
 
-      <div className="app-header-right">
+      <div className={styles["app-header-right"]}>
         {!account ? (
           <WalletConnectButton />
         ) : (
@@ -26,10 +26,10 @@ export default function Header() {
             {network?.logoUrl && (
               <img src={network.logoUrl} alt={network.name} style={{ height: "20px" }} />
             )}
-            <span className="wallet-address">
+            <span className={styles["wallet-address"]}>
               {account.slice(0, 6)}…{account.slice(-4)}
             </span>
-            <button onClick={disconnect} className="app-sidebar-toggle">
+            <button onClick={disconnect} className={styles.disconnectButton}>
               Disconnect
             </button>
           </div>
